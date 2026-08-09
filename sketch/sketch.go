@@ -22,13 +22,14 @@ type Sketch struct {
 	scene Scene
 }
 
-func New(screenWidth, screenHeight int, opts ...Option) *Sketch {
+func New(screenWidth, screenHeight int, scene Scene, opts ...Option) *Sketch {
 	var (
 		r = &Sketch{
 			screenWidth:     screenWidth,
 			screenHeight:    screenHeight,
 			backgroundColor: color.RGBA{240, 240, 240, 255},
 			antyaliasing:    true,
+			scene:           scene,
 		}
 		params = sketchBuildParams{
 			r:                   r,
@@ -88,5 +89,12 @@ func (r *Sketch) ScreenSize() (float32, float32) {
 }
 
 func (r *Sketch) Run() error {
+	if r.scene == nil {
+		return ErrNilScene
+	}
+	if r.screenWidth <= 0 || r.screenHeight <= 0 {
+		return ErrInvalidScreenDimensions
+	}
+
 	return ebiten.RunGame(r)
 }

@@ -8,8 +8,14 @@ type Vector struct {
 	X, Y float64
 }
 
+// New returns a new vector with the given x and y components.
 func New(x, y float64) Vector {
 	return Vector{X: x, Y: y}
+}
+
+// Values returns vector's x and y components.
+func (v Vector) Values() (float64, float64) {
+	return v.X, v.Y
 }
 
 // Add returns a new vector equal to the sum of v and other.
