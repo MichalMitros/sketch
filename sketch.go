@@ -1,28 +1,35 @@
 package sketch
 
 import (
+	"errors"
 	"image/color"
+	"sync"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-// Scene is a single sketchable object.
-type Scene interface {
+// Sketchable is a single sketchable object.
+type Sketchable interface {
 	// Update is called every frame.
 	Update(*State) error
 	// Draw is used each frame to render it.
 	Draw(*Screen)
+	// Setup is called once before first Update() call.
+	Setup(state *State) error
 }
 
 type Sketch struct {
 	screenWidth, screenHeight int
 	backgroundColor           color.Color
 	antyaliasing              bool
+	terminationKey            *Key
 
-	scene Scene
+	scene Sketchable
+
+	once sync.Once
 }
 
-func New(screenWidth, screenHeight int, scene Scene, opts ...Option) *Sketch {
+func New(screenWidth, screenHeight int, scene Sketchable, opts ...Option) *Sketch {
 	var (
 		r = &Sketch{
 			screenWidth:     screenWidth,
@@ -52,13 +59,26 @@ func New(screenWidth, screenHeight int, scene Scene, opts ...Option) *Sketch {
 	return r
 }
 
-func (r *Sketch) Update() error {
-	if ebiten.IsKeyPressed(ebiten.KeyQ) {
-		return ebiten.Termination
-	}
+func (r *Sketch) Update() (err error) {
+	defer func() {
+		if errors.Is(err, Termination) {
+			err = ebiten.Termination
+		}
+	}()
 
 	if r.scene == nil {
-		panic("scene cannot be nil")
+		return ErrNilScene
+	}
+
+	r.once.Do(func() {
+		err = r.scene.Setup(newState(r.screenWidth, r.screenHeight, r.backgroundColor))
+	})
+	if err != nil {
+		return err
+	}
+
+	if r.terminationKey != nil && IsKeyPressed(*r.terminationKey) {
+		return Termination
 	}
 
 	return r.scene.Update(
@@ -67,11 +87,11 @@ func (r *Sketch) Update() error {
 }
 
 func (r *Sketch) Draw(img *ebiten.Image) {
-	img.Fill(r.backgroundColor)
-
 	if r.scene == nil {
 		panic("scene cannot be nil")
 	}
+
+	img.Fill(r.backgroundColor)
 
 	r.scene.Draw(
 		newScreen(img, r.backgroundColor, r.antyaliasing),

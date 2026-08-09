@@ -54,3 +54,10 @@ func WithRunnableOnUnfocused(enable bool) Option {
 		*p.runnableOnUnfocused = enable
 	}
 }
+
+// WithTerminationKey sets the key which will terminate the game.
+func WithTerminationKey(k Key) Option {
+	return func(p sketchBuildParams) {
+		p.r.terminationKey = &k
+	}
+}

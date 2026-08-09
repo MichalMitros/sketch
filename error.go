@@ -11,4 +11,5 @@ const (
 	ErrNilScene sketchErr = "scene cannot be nil"
 	// ErrInvalidScreenDimensions is returned when the screen dimensions are not positive.
 	ErrInvalidScreenDimensions sketchErr = "screen dimensions must be positive"
+	Termination                sketchErr = "sketch terminated"
 )
