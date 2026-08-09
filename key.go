@@ -128,3 +128,8 @@ const (
 	KeyControl        Key = Key(ebiten.KeyControl)
 	KeyShift          Key = Key(ebiten.KeyShift)
 )
+
+// IsKeyPressed returns true if the given key is currently pressed.
+func IsKeyPressed(k Key) bool {
+	return ebiten.IsKeyPressed(ebiten.Key(k))
+}

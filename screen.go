@@ -38,16 +38,6 @@ func (s *Screen) ScreenSize() (float64, float64) {
 	return s.Width(), s.Height()
 }
 
-// FPS returns the current frames per second.
-func (s *Screen) FPS() float64 {
-	return ebiten.ActualFPS()
-}
-
-// TPS returns the current ticks per second.
-func (s *Screen) TPS() float64 {
-	return ebiten.ActualTPS()
-}
-
 // Clear clears the screen.
 func (s *Screen) Clear() {
 	s.img.Fill(s.background)
