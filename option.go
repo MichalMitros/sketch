@@ -7,13 +7,13 @@ import (
 )
 
 type sketchBuildParams struct {
-	r                   *Sketch
+	r                   *renderer
 	windowTitle         *string
 	resizingMode        *ebiten.WindowResizingModeType
 	runnableOnUnfocused *bool
 }
 
-// Option is a function that configures a Sketch.
+// Option is a function that configures a sketch.
 type Option func(sketchBuildParams)
 
 // WithWindowTitle sets the window title of the sketch (no title by default).
@@ -56,8 +56,8 @@ func WithRunnableOnUnfocused(enable bool) Option {
 }
 
 // WithTerminationKey sets the key which will terminate the game.
-func WithTerminationKey(k Key) Option {
+func WithTerminationKeys(k ...Key) Option {
 	return func(p sketchBuildParams) {
-		p.r.terminationKey = &k
+		p.r.terminationKeys = append(p.r.terminationKeys, k...)
 	}
 }

@@ -3,6 +3,7 @@ package sketch
 import (
 	"image/color"
 
+	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -22,8 +23,8 @@ func newState(width, height int, backgroundColor color.Color) *State {
 }
 
 // ScreenSize returns the width and height of the screen.
-func (s *State) ScreenSize() (float64, float64) {
-	return float64(s.width), float64(s.height)
+func (s *State) ScreenSize() vector.Vector {
+	return vector.New(float64(s.width), float64(s.height))
 }
 
 // IsKeyPressed returns true if the given key is currently pressed.

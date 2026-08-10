@@ -1,7 +1,7 @@
 package sketch
 
 import (
-	"github.com/MichalMitros/sketch/vec"
+	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -25,7 +25,7 @@ func IsMouseButtonPressed(k Key) bool {
 }
 
 // CursorPosition returns the current position of the mouse cursor.
-func CursorPosition() vec.Vector {
+func CursorPosition() vector.Vector {
 	x, y := ebiten.CursorPosition()
-	return vec.New(float64(x), float64(y))
+	return vector.New(float64(x), float64(y))
 }

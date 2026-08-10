@@ -3,9 +3,9 @@ package sketch
 import (
 	"image/color"
 
-	"github.com/MichalMitros/sketch/vec"
+	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+	ebiten_vec "github.com/hajimehoshi/ebiten/v2/vector"
 )
 
 // Screen is the screen used to draw to.
@@ -54,52 +54,52 @@ func (s *Screen) At(x, y int) color.Color {
 }
 
 // Line draws a line from v1 to v2 with the given stroke width and color.
-func (s *Screen) Line(v1, v2 vec.Vector, strokeWidth float32, c color.Color) {
-	vector.StrokeLine(
+func (s *Screen) Line(v1, v2 vector.Vector, strokeWidth float64, c color.Color) {
+	ebiten_vec.StrokeLine(
 		s.img,
 		float32(v1.X), float32(v1.Y),
 		float32(v2.X), float32(v2.Y),
-		strokeWidth, c,
+		float32(strokeWidth), c,
 		s.antyaliasing,
 	)
 }
 
 // Circle draws a circle at the given position with the given radius, stroke width and color.
-func (s *Screen) Circle(v vec.Vector, radius, strokeWidth float32, c color.Color) {
-	vector.StrokeCircle(
+func (s *Screen) Circle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+	ebiten_vec.StrokeCircle(
 		s.img,
 		float32(v.X), float32(v.Y),
-		radius, strokeWidth, c,
+		float32(radius), float32(strokeWidth), c,
 		s.antyaliasing,
 	)
 }
 
 // Rectangle draws a rectangle at the given position with the given width, height, stroke width and color.
-func (s *Screen) Rectangle(v vec.Vector, width, height, strokeWidth float32, c color.Color) {
-	vector.StrokeRect(
+func (s *Screen) Rectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+	ebiten_vec.StrokeRect(
 		s.img,
 		float32(v.X), float32(v.Y),
-		width, height, strokeWidth, c,
+		float32(width), float32(height), float32(strokeWidth), c,
 		s.antyaliasing,
 	)
 }
 
 // FillCircle draws a filled circle at the given position with the given radius, stroke width and color.
-func (s *Screen) FillCircle(v vec.Vector, radius, strokeWidth float32, c color.Color) {
-	vector.FillCircle(
+func (s *Screen) FillCircle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+	ebiten_vec.FillCircle(
 		s.img,
 		float32(v.X), float32(v.Y),
-		radius, c,
+		float32(radius), c,
 		s.antyaliasing,
 	)
 }
 
 // FillRectangle draws a filled rectangle at the given position with the given width, height, stroke width and color.
-func (s *Screen) FillRectangle(v vec.Vector, width, height, strokeWidth float32, c color.Color) {
-	vector.FillRect(
+func (s *Screen) FillRectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+	ebiten_vec.FillRect(
 		s.img,
 		float32(v.X), float32(v.Y),
-		width, height, c,
+		float32(width), float32(height), c,
 		s.antyaliasing,
 	)
 }

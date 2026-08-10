@@ -1,6 +1,7 @@
 package sketch
 
 import (
+	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -22,4 +23,10 @@ func IsFullscreen() bool {
 // Fullscreen sets the sketch to fullscreen.
 func Fullscreen(enable bool) {
 	ebiten.SetFullscreen(enable)
+}
+
+// MonitorSize returns the size of the monitor.
+func MonitorSize() vector.Vector {
+	w, h := ebiten.Monitor().Size()
+	return vector.New(float64(w), float64(h))
 }

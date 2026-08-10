@@ -1,5 +1,5 @@
 // Package vec provides a simple 2D vector type.
-package vec
+package vector
 
 import "math"
 
