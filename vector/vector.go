@@ -13,6 +13,11 @@ func New(x, y float64) Vector {
 	return Vector{X: x, Y: y}
 }
 
+// Zero returns a new vector with zero components.
+func Zero() Vector {
+	return Vector{X: 0, Y: 0}
+}
+
 // Values returns vector's x and y components.
 func (v Vector) Values() (float64, float64) {
 	return v.X, v.Y
@@ -40,7 +45,7 @@ func (v Vector) Scale(s float64) Vector {
 
 // Mag returns the magnitude (length) of the vector.
 func (v Vector) Mag() float64 {
-	return float64(math.Sqrt(v.X*v.X + v.Y*v.Y))
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
 // SetMag sets the magnitude (length) of the vector without changing its direction.
@@ -55,13 +60,13 @@ func (v Vector) SetMag(mag float64) Vector {
 
 // Dist returns distance between vector and provided other vector.
 func (v Vector) Dist(other Vector) float64 {
-	return float64(math.Sqrt((other.X-v.X)*(other.X-v.X) + (other.Y-v.Y)*(other.Y-v.Y)))
+	return math.Sqrt((other.X-v.X)*(other.X-v.X) + (other.Y-v.Y)*(other.Y-v.Y))
 }
 
 // Rotate returns a new vector rotated by angle radians (counter-clockwise).
 func (v Vector) Rotate(angle float64) Vector {
-	cos := float64(math.Cos(angle))
-	sin := float64(math.Sin(angle))
+	cos := math.Cos(angle)
+	sin := math.Sin(angle)
 	return Vector{
 		X: v.X*cos - v.Y*sin,
 		Y: v.X*sin + v.Y*cos,
@@ -70,5 +75,13 @@ func (v Vector) Rotate(angle float64) Vector {
 
 // Angle returns the angle of the vector in radians (counter-clockwise).
 func (v Vector) Angle() float64 {
-	return float64(math.Atan2(v.Y, v.X))
+	return math.Atan2(v.Y, v.X)
+}
+
+// ToPolar returns the polar coordinates of the vector.
+func (v Vector) Polar() Polar {
+	return Polar{
+		Radius: v.Mag(),
+		Angle:  v.Angle(),
+	}
 }
