@@ -111,15 +111,21 @@ func (s *Screen) Line(v1, v2 vector.Vector, strokeWidth float64, c color.Color) 
 	s.strokePath(&path, strokeWidth, c)
 }
 
-// Circle draws a circle at the given position with the given radius, stroke width and color.
-func (s *Screen) Circle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
-	path := circlePath(v, radius)
-	s.strokePath(&path, strokeWidth, c)
-}
-
 // Rectangle draws a rectangle at the given position with the given width, height, stroke width and color.
 func (s *Screen) Rectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
 	path := rectanglePath(v, width, height)
+	s.strokePath(&path, strokeWidth, c)
+}
+
+// FillRectangle draws a filled rectangle at the given position with the given width, height, stroke width and color.
+func (s *Screen) FillRectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+	path := rectanglePath(v, width, height)
+	s.fillPath(&path, c)
+}
+
+// Circle draws a circle at the given position with the given radius, stroke width and color.
+func (s *Screen) Circle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+	path := circlePath(v, radius)
 	s.strokePath(&path, strokeWidth, c)
 }
 
@@ -129,9 +135,15 @@ func (s *Screen) FillCircle(v vector.Vector, radius, strokeWidth float64, c colo
 	s.fillPath(&path, c)
 }
 
-// FillRectangle draws a filled rectangle at the given position with the given width, height, stroke width and color.
-func (s *Screen) FillRectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
-	path := rectanglePath(v, width, height)
+// Arc draws an arc at the given position with the given radius, start angle, end angle, stroke width and color.
+func (s *Screen) Arc(v vector.Vector, radius, startAngle, endAngle, strokeWidth float64, c color.Color) {
+	path := arcPath(v, radius, startAngle, endAngle)
+	s.strokePath(&path, strokeWidth, c)
+}
+
+// FillArc draws a filled arc (pie slice) at the given position with the given radius, start angle, end angle and color.
+func (s *Screen) FillArc(v vector.Vector, radius, startAngle, endAngle float64, c color.Color) {
+	path := fillArcPath(v, radius, startAngle, endAngle)
 	s.fillPath(&path, c)
 }
 
@@ -140,6 +152,32 @@ func circlePath(v vector.Vector, radius float64) ebiten_vec.Path {
 	path.Arc(
 		float32(v.X), float32(v.Y), float32(radius),
 		0, 2*math.Pi, ebiten_vec.Clockwise,
+	)
+	path.Close()
+	return path
+}
+
+func arcPath(v vector.Vector, radius, startAngle, endAngle float64) ebiten_vec.Path {
+	var path ebiten_vec.Path
+	startX := v.X + radius*math.Cos(startAngle)
+	startY := v.Y + radius*math.Sin(startAngle)
+	path.MoveTo(float32(startX), float32(startY))
+	path.Arc(
+		float32(v.X), float32(v.Y), float32(radius),
+		float32(startAngle), float32(endAngle), ebiten_vec.Clockwise,
+	)
+	return path
+}
+
+func fillArcPath(v vector.Vector, radius, startAngle, endAngle float64) ebiten_vec.Path {
+	var path ebiten_vec.Path
+	path.MoveTo(float32(v.X), float32(v.Y))
+	startX := v.X + radius*math.Cos(startAngle)
+	startY := v.Y + radius*math.Sin(startAngle)
+	path.LineTo(float32(startX), float32(startY))
+	path.Arc(
+		float32(v.X), float32(v.Y), float32(radius),
+		float32(startAngle), float32(endAngle), ebiten_vec.Clockwise,
 	)
 	path.Close()
 	return path
