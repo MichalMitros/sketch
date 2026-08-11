@@ -37,9 +37,9 @@ func (s *Screen) Height() float64 {
 	return float64(s.img.Bounds().Dy())
 }
 
-// ScreenSize returns the width and height of the screen.
-func (s *Screen) ScreenSize() (float64, float64) {
-	return s.Width(), s.Height()
+// Size returns the width and height of the screen.
+func (s *Screen) Size() vector.Vector {
+	return vector.New(s.Width(), s.Height())
 }
 
 // Clear clears the screen.
