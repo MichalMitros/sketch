@@ -29,3 +29,9 @@ func CursorPosition() vector.Vector {
 	x, y := ebiten.CursorPosition()
 	return vector.New(float64(x), float64(y))
 }
+
+// Scroll returns the current scroll amount of the mouse wheel.
+func Scroll() (dx, dy float64) {
+	x, y := ebiten.Wheel()
+	return float64(x), float64(y)
+}

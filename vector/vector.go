@@ -1,4 +1,4 @@
-// Package vec provides a simple 2D vector type.
+// Package vector provides a simple 2D vector type.
 package vector
 
 import "math"
