@@ -76,5 +76,5 @@ func Run(
 		globalSketchMu.Unlock()
 	}()
 
-	return ebiten.RunGame(newRenderer(screenWidth, screenHeight, opts...))
+	return ebiten.RunGame(newRunner(screenWidth, screenHeight, opts...))
 }

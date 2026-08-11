@@ -8,7 +8,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type renderer struct {
+type runner struct {
 	screenWidth, screenHeight int
 	backgroundColor           color.Color
 	antyaliasing              bool
@@ -17,12 +17,12 @@ type renderer struct {
 	once sync.Once
 }
 
-func newRenderer(
+func newRunner(
 	screenWidth, screenHeight int,
 	opts ...Option,
-) *renderer {
+) *runner {
 	var (
-		r = &renderer{
+		r = &runner{
 			screenWidth:     screenWidth,
 			screenHeight:    screenHeight,
 			backgroundColor: color.RGBA{240, 240, 240, 255},
@@ -50,7 +50,7 @@ func newRenderer(
 	return r
 }
 
-func (r *renderer) Update() (err error) {
+func (r *runner) Update() (err error) {
 	defer func() {
 		if errors.Is(err, Termination) {
 			err = ebiten.Termination
@@ -82,7 +82,7 @@ func (r *renderer) Update() (err error) {
 	)
 }
 
-func (r *renderer) Draw(img *ebiten.Image) {
+func (r *runner) Draw(img *ebiten.Image) {
 	sketch := currentSketch()
 	if sketch == nil {
 		panic(ErrNilSketch)
@@ -95,7 +95,7 @@ func (r *renderer) Draw(img *ebiten.Image) {
 	)
 }
 
-func (r *renderer) Layout(outsideWidth, outsideHeight int) (int, int) {
+func (r *runner) Layout(outsideWidth, outsideHeight int) (int, int) {
 	r.screenWidth = outsideWidth
 	r.screenHeight = outsideHeight
 	return outsideWidth, outsideHeight

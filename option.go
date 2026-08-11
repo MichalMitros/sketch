@@ -7,7 +7,7 @@ import (
 )
 
 type sketchBuildParams struct {
-	r                   *renderer
+	r                   *runner
 	windowTitle         *string
 	resizingMode        *ebiten.WindowResizingModeType
 	runnableOnUnfocused *bool
