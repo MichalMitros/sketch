@@ -147,6 +147,28 @@ func (s *Screen) FillArc(v vector.Vector, radius, startAngle, endAngle float64, 
 	s.fillPath(&path, c)
 }
 
+// Shape draws a polygon through the given points with the given stroke width and color.
+// If close is true, the shape is closed. If len(points) < 2, nothing is drawn.
+// If len(points) == 2, a line is drawn.
+func (s *Screen) Shape(points []vector.Vector, close bool, strokeWidth float64, c color.Color) {
+	if len(points) < 2 {
+		return
+	}
+	path := polygonPath(points, close)
+	s.strokePath(&path, strokeWidth, c)
+}
+
+// FillShape draws a filled polygon through the given points with the given color.
+// If close is true, the shape is closed. If len(points) < 2, nothing is drawn.
+// If len(points) == 2, a line is drawn.
+func (s *Screen) FillShape(points []vector.Vector, close bool, c color.Color) {
+	if len(points) < 2 {
+		return
+	}
+	path := polygonPath(points, close)
+	s.fillPath(&path, c)
+}
+
 func circlePath(v vector.Vector, radius float64) ebiten_vec.Path {
 	var path ebiten_vec.Path
 	path.Arc(
@@ -190,6 +212,18 @@ func rectanglePath(v vector.Vector, width, height float64) ebiten_vec.Path {
 	path.LineTo(float32(v.X+width), float32(v.Y+height))
 	path.LineTo(float32(v.X), float32(v.Y+height))
 	path.Close()
+	return path
+}
+
+func polygonPath(points []vector.Vector, close bool) ebiten_vec.Path {
+	var path ebiten_vec.Path
+	path.MoveTo(float32(points[0].X), float32(points[0].Y))
+	for _, p := range points[1:] {
+		path.LineTo(float32(p.X), float32(p.Y))
+	}
+	if close {
+		path.Close()
+	}
 	return path
 }
 
