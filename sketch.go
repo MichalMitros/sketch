@@ -1,3 +1,6 @@
+// Package sketch is a simplified wrapper around Ebiten Go's 2D game engine designed for
+// creative coding and quick visual experiments. Instead of managing the full Ebiten game loop yourself,
+// you implement a single `Sketchable` interface and call `Run`.
 package sketch
 
 import (
