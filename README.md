@@ -1,3 +1,7 @@
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/stretchr/testify)](https://pkg.go.dev/github.com/stretchr/testify)
+[![Build Status](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml/badge.svg)](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/MichalMitros/sketch/branch/master/graph/badge.svg)](https://codecov.io/gh/MichalMitros/sketch)
+
 # sketch
 
 A simplified, opinionated wrapper around [Ebiten](https://github.com/hajimehoshi/ebiten) Go's 2D game engine designed for creative coding and quick visual experiments. Instead of managing the full Ebiten game loop yourself, you implement a single `Sketchable` interface and call `Run`. The library handles window setup, frame scheduling, and coordinate-system transforms so you can focus on drawing.
