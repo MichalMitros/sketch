@@ -1,0 +1,51 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - gocritic
+    - govet
+    - gocyclo
+    - gocognit
+    - errcheck
+    - ineffassign
+    - staticcheck
+    - unused
+    - copyloopvar
+    - godoclint
+    - goprintffuncname
+    - iface
+    - iotamixing
+    - mirror
+  settings:
+    errcheck:
+      check-type-assertions: true
+    govet:
+      enable:
+        - nilness
+    revive:
+      rules:
+        - name: exported
+          severity: warning
+          disabled: true
+    godoclint:
+      default: none
+      enable:
+        - start-with-name
+        - pkg-doc
+        - require-doc
+        - deprecated
+    gocyclo:
+      min-complexity: 20
+    gocognit:
+      min-complexity: 20
+  exclusions:
+    rules:
+      - linters:
+          - godoclint
+        path: ".*_test\\.go$"
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
