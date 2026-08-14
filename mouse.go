@@ -8,6 +8,7 @@ import (
 // MouseButton is a mouse button.
 type MouseButton int
 
+// Mouse buttons.
 const (
 	MouseButtonLeft   MouseButton = MouseButton(ebiten.MouseButtonLeft)
 	MouseButtonRight  MouseButton = MouseButton(ebiten.MouseButtonRight)
@@ -19,7 +20,7 @@ const (
 	MouseButton4      MouseButton = MouseButton(ebiten.MouseButton4)
 )
 
-// IsKeyPressed returns true if the given key is currently pressed.
+// IsMouseButtonPressed returns true if the given mouse button is currently pressed.
 func IsMouseButtonPressed(k Key) bool {
 	return ebiten.IsMouseButtonPressed(ebiten.MouseButton(k))
 }

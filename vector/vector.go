@@ -78,7 +78,7 @@ func (v Vector) Angle() float64 {
 	return math.Atan2(v.Y, v.X)
 }
 
-// ToPolar returns the polar coordinates of the vector.
+// Polar returns the polar coordinates of the vector.
 func (v Vector) Polar() Polar {
 	return Polar{
 		Radius: v.Mag(),

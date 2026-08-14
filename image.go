@@ -2,7 +2,6 @@ package sketch
 
 import (
 	"image"
-	stdimage "image"
 	"image/color"
 	"io/fs"
 
@@ -205,9 +204,10 @@ func (i *Image) Clear() {
 // pixel data - modifying pixels in one affects the other.
 // Use Clone() if you need an independent copy.
 func (i *Image) SubImage(pos, size vector.Vector) *Image {
-	r := stdimage.Rect(int(pos.X), int(pos.Y), int(pos.X+size.X), int(pos.Y+size.Y))
+	r := image.Rect(int(pos.X), int(pos.Y), int(pos.X+size.X), int(pos.Y+size.Y))
+	subimage, _ := i.img.SubImage(r).(*ebiten.Image)
 	return &Image{
-		img: i.img.SubImage(r).(*ebiten.Image),
+		img: subimage,
 	}
 }
 

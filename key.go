@@ -5,6 +5,7 @@ import "github.com/hajimehoshi/ebiten/v2"
 // Key is a key on the keyboard.
 type Key int
 
+// Keyboard keys.
 const (
 	KeyA              Key = Key(ebiten.KeyA)
 	KeyB              Key = Key(ebiten.KeyB)
