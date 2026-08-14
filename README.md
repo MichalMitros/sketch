@@ -1,5 +1,5 @@
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/stretchr/testify)](https://pkg.go.dev/github.com/stretchr/testify)
-[![Build Status](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml/badge.svg)](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/MichalMitros/sketch)](https://pkg.go.dev/github.com/MichalMitros/sketch)
+[![Build Status](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/MichalMitros/sketch/branch/master/graph/badge.svg)](https://codecov.io/gh/MichalMitros/sketch)
 
 # sketch
