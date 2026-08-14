@@ -91,7 +91,7 @@ func (r *runner) Draw(img *ebiten.Image) {
 	img.Fill(r.backgroundColor)
 
 	sketch.Draw(
-		newScreen(img, r.backgroundColor, r.antyaliasing),
+		newScreen(fromEbitenImage(img), r.backgroundColor, r.antyaliasing),
 	)
 }
 

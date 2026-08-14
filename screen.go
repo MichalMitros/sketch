@@ -12,13 +12,13 @@ import (
 
 // Screen is the screen used to draw to.
 type Screen struct {
-	img          *ebiten.Image
+	img          *Image
 	antyaliasing bool
 	background   color.Color
 	transforms   internal.TransformationStack
 }
 
-func newScreen(img *ebiten.Image, background color.Color, antyaliasing bool) *Screen {
+func newScreen(img *Image, background color.Color, antyaliasing bool) *Screen {
 	return &Screen{
 		img:          img,
 		background:   background,
@@ -29,17 +29,17 @@ func newScreen(img *ebiten.Image, background color.Color, antyaliasing bool) *Sc
 
 // Width returns the width of the screen.
 func (s *Screen) Width() float64 {
-	return float64(s.img.Bounds().Dx())
+	return float64(s.img.Width())
 }
 
 // Height returns the height of the screen.
 func (s *Screen) Height() float64 {
-	return float64(s.img.Bounds().Dy())
+	return float64(s.img.Height())
 }
 
 // Size returns the width and height of the screen.
 func (s *Screen) Size() vector.Vector {
-	return vector.New(s.Width(), s.Height())
+	return s.img.Size()
 }
 
 // Clear clears the screen.
@@ -53,8 +53,8 @@ func (s *Screen) Fill(c color.Color) {
 }
 
 // At returns the color at the given position.
-func (s *Screen) At(x, y int) color.Color {
-	return s.img.At(x, y)
+func (s *Screen) At(v vector.Vector) color.Color {
+	return s.img.At(v)
 }
 
 // Scale scales both coordinate axes by rate.
@@ -169,6 +169,30 @@ func (s *Screen) FillShape(points []vector.Vector, close bool, c color.Color) {
 	s.fillPath(&path, c)
 }
 
+// DrawImage draws an image onto the screen at the given position,
+// scaled to the given size. The image is drawn with respect to the current transformation
+// stack (scale, rotate, translate). Passing a nil image is a no-op.
+func (s *Screen) DrawImage(img *Image, pos, size vector.Vector) {
+	if img == nil {
+		return
+	}
+
+	imgW, imgH := img.Size().Values()
+
+	if imgW == 0 || imgH == 0 {
+		return
+	}
+
+	var eo ebiten.DrawImageOptions
+	// Operations are applied in reverse call order:
+	// p' = TransformStack * Translate(pos) * Scale(sx, sy) * p
+	eo.GeoM.Concat(s.transforms.GeometryMatrix())
+	eo.GeoM.Translate(pos.X, pos.Y)
+	eo.GeoM.Scale(size.X/imgW, size.Y/imgH)
+
+	s.img.toEbitenImage().DrawImage(img.toEbitenImage(), &eo)
+}
+
 func circlePath(v vector.Vector, radius float64) ebiten_vec.Path {
 	var path ebiten_vec.Path
 	path.Arc(
@@ -245,7 +269,7 @@ func (s *Screen) drawPathOptions(c color.Color) ebiten_vec.DrawPathOptions {
 func (s *Screen) fillPath(path *ebiten_vec.Path, c color.Color) {
 	transformed := s.transformedPath(path)
 	options := s.drawPathOptions(c)
-	ebiten_vec.FillPath(s.img, &transformed, nil, &options)
+	ebiten_vec.FillPath(s.img.toEbitenImage(), &transformed, nil, &options)
 }
 
 func (s *Screen) strokePath(path *ebiten_vec.Path, strokeWidth float64, c color.Color) {
@@ -255,5 +279,5 @@ func (s *Screen) strokePath(path *ebiten_vec.Path, strokeWidth float64, c color.
 		GeoM:          s.transforms.GeometryMatrix(),
 	})
 	options := s.drawPathOptions(c)
-	ebiten_vec.FillPath(s.img, &transformed, nil, &options)
+	ebiten_vec.FillPath(s.img.toEbitenImage(), &transformed, nil, &options)
 }
