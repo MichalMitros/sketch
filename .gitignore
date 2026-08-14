@@ -1,3 +1,6 @@
-vendor
 .vscode
-main.go
+
+vendor
+
+*.out
+coverage.html
