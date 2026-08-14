@@ -149,14 +149,14 @@ When resizing of the window is enabled, always read dimensions from `State` inst
 Push/pull a transformation stack to isolate coordinate changes:
 
 ```go
-screen.Push()
+screen.Push()			  // push a new transformation layer to easily isolate changes
 screen.Translate(v)       // move origin
 screen.Rotate(angle)      // rotate axes (radians)
 screen.Scale(rate)        // uniform scale
 screen.ScaleX(rate)       // scale only X
 screen.ScaleY(rate)       // scale only Y
 // ... draw shapes ...
-screen.Pull()
+screen.Pull()			  // pop the transformation layer to restore previous layer
 ```
 
 ### Shapes
@@ -185,6 +185,68 @@ screen.Width() / screen.Height() / screen.Size()
 ```
 
 ---
+
+## Image
+
+`Image` is a drawable 2D image type. Load from files, create blank canvases, or draw images onto each other with transform support.
+
+### Loading & Creating
+
+```go
+img, err := sketch.ImageFromFile("path/to/image.png")   // GIF, JPEG, PNG
+img, err := sketch.ImageFromFS(fsys, "path/to/image.png")
+img := sketch.ImageFromStdImage(stdImg)
+img := sketch.NewBlankImage(dim)          // transparent
+img := sketch.NewFilledImage(dim, color)  // filled with color
+img := sketch.NewWhiteImage(dim)          // white
+img := sketch.NewBlackImage(dim)          // black
+```
+
+### Drawing
+
+Draw an image onto another using `DrawOptions`:
+
+```go
+opts := sketch.DefaultDrawOptions()
+opts.Pos = vector.New(100, 100)
+opts.Anchor = vector.New(0.5, 0.5)  // center
+opts.Scale = vector.New(2, 2)
+opts.Rotation = math.Pi / 4
+opts.Tint = color.RGBA{255, 200, 200, 255}
+opts.Opacity = 0.8
+img.Draw(dst, &opts)
+
+img.DrawAt(dst, pos)  // shorthand
+```
+
+Plus:
+
+```go
+img.Width() / img.Height() / img.Size()
+img.At(v) / img.Set(v, c)
+img.Fill(c) / img.Clear()
+img.Clone()
+img.SubImage(pos, size)
+img.CopyTo(dst, srcPos, size, dstPos)
+```
+
+### Drawing on Screen
+
+```go
+screen.DrawImage(img, pos, size)
+```
+
+### Example
+
+```go
+img, _ := sketch.ImageFromFile("sprite.png")
+opts := sketch.DefaultDrawOptions()
+opts.Pos = vector.New(200, 150)
+opts.Anchor = vector.New(0.5, 0.5)
+opts.Scale = vector.New(2, 2)
+opts.Rotation = math.Pi / 4
+img.Draw(canvas, &opts)
+```
 
 ## Vector & Polar
 
