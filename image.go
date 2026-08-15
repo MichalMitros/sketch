@@ -12,6 +12,7 @@ import (
 	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	ebiten_vec "github.com/hajimehoshi/ebiten/v2/vector"
 )
 
 // Image represents a drawable 2D image.
@@ -219,4 +220,88 @@ func (i *Image) CopyTo(dst *Image, srcPos, size, dstPos vector.Vector) {
 	opts := DefaultDrawOptions()
 	opts.Pos = dstPos
 	src.Draw(dst, &opts)
+}
+
+// Line draws a line from v1 to v2 with the given stroke width and color.
+func (i *Image) Line(v1, v2 vector.Vector, strokeWidth float64, c color.Color) {
+	var path ebiten_vec.Path
+	path.MoveTo(float32(v1.X), float32(v1.Y))
+	path.LineTo(float32(v2.X), float32(v2.Y))
+	i.strokePath(&path, strokeWidth, c)
+}
+
+// Rectangle draws a rectangle at the given position with the given width, height, stroke width and color.
+func (i *Image) Rectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+	path := rectanglePath(v, width, height)
+	i.strokePath(&path, strokeWidth, c)
+}
+
+// FillRectangle draws a filled rectangle at the given position with the given width, height, stroke width and color.
+func (i *Image) FillRectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+	path := rectanglePath(v, width, height)
+	i.fillPath(&path, c)
+}
+
+// Circle draws a circle at the given position with the given radius, stroke width and color.
+func (i *Image) Circle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+	path := circlePath(v, radius)
+	i.strokePath(&path, strokeWidth, c)
+}
+
+// FillCircle draws a filled circle at the given position with the given radius, stroke width and color.
+func (i *Image) FillCircle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+	path := circlePath(v, radius)
+	i.fillPath(&path, c)
+}
+
+// Arc draws an arc at the given position with the given radius, start angle, end angle, stroke width and color.
+func (i *Image) Arc(v vector.Vector, radius, startAngle, endAngle, strokeWidth float64, c color.Color) {
+	path := arcPath(v, radius, startAngle, endAngle)
+	i.strokePath(&path, strokeWidth, c)
+}
+
+// FillArc draws a filled arc (pie slice) at the given position with the given radius, start angle, end angle and color.
+func (i *Image) FillArc(v vector.Vector, radius, startAngle, endAngle float64, c color.Color) {
+	path := fillArcPath(v, radius, startAngle, endAngle)
+	i.fillPath(&path, c)
+}
+
+// Shape draws a polygon through the given points with the given stroke width and color.
+// If close is true, the shape is closed. If len(points) < 2, nothing is drawn.
+// If len(points) == 2, a line is drawn.
+func (i *Image) Shape(points []vector.Vector, close bool, strokeWidth float64, c color.Color) {
+	if len(points) < 2 {
+		return
+	}
+	path := polygonPath(points, close)
+	i.strokePath(&path, strokeWidth, c)
+}
+
+// FillShape draws a filled polygon through the given points with the given color.
+// If close is true, the shape is closed. If len(points) < 2, nothing is drawn.
+// If len(points) == 2, a line is drawn.
+func (i *Image) FillShape(points []vector.Vector, close bool, c color.Color) {
+	if len(points) < 2 {
+		return
+	}
+	path := polygonPath(points, close)
+	i.fillPath(&path, c)
+}
+
+func (i *Image) fillPath(path *ebiten_vec.Path, c color.Color) {
+	var options ebiten_vec.DrawPathOptions
+	options.AntiAlias = true
+	options.ColorScale.ScaleWithColor(c)
+	ebiten_vec.FillPath(i.img, path, nil, &options)
+}
+
+func (i *Image) strokePath(path *ebiten_vec.Path, strokeWidth float64, c color.Color) {
+	var stroked ebiten_vec.Path
+	stroked.AddStroke(path, &ebiten_vec.AddStrokeOptions{
+		StrokeOptions: ebiten_vec.StrokeOptions{Width: float32(strokeWidth)},
+	})
+	var options ebiten_vec.DrawPathOptions
+	options.AntiAlias = true
+	options.ColorScale.ScaleWithColor(c)
+	ebiten_vec.FillPath(i.img, &stroked, nil, &options)
 }

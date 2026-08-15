@@ -347,3 +347,131 @@ func TestImageSubImageSharedData(t *testing.T) {
 	sub := original.SubImage(vector.New(2, 2), vector.New(4, 4))
 	sub.Set(vector.New(0, 0), color.RGBA{255, 0, 0, 255})
 }
+
+func TestImageLine(t *testing.T) {
+	img := NewBlankImage(vector.New(100, 100))
+	img.Line(vector.New(10, 50), vector.New(90, 50), 2, color.Black)
+}
+
+func TestImageRectangle(t *testing.T) {
+	img := NewBlankImage(vector.New(100, 100))
+	img.Rectangle(vector.New(20, 20), 40, 30, 2, color.Black)
+}
+
+func TestImageFillRectangle(t *testing.T) {
+	img := NewBlankImage(vector.New(100, 100))
+	img.FillRectangle(vector.New(10, 10), 20, 30, 0, color.Black)
+}
+
+func TestImageCircle(t *testing.T) {
+	img := NewBlankImage(vector.New(100, 100))
+	img.Circle(vector.New(50, 50), 20, 2, color.Black)
+}
+
+func TestImageFillCircle(t *testing.T) {
+	img := NewBlankImage(vector.New(100, 100))
+	img.FillCircle(vector.New(50, 50), 20, 0, color.Black)
+}
+
+func TestImageArc(t *testing.T) {
+	scenarios := map[string]struct {
+		startAngle float64
+		endAngle   float64
+	}{
+		"full circle":     {startAngle: 0, endAngle: 2 * math.Pi},
+		"half circle top": {startAngle: 0, endAngle: math.Pi},
+		"quarter circle":  {startAngle: 0, endAngle: math.Pi / 2},
+	}
+
+	for name, tc := range scenarios {
+		t.Run(name, func(t *testing.T) {
+			img := NewBlankImage(vector.New(100, 100))
+			img.Arc(vector.New(50, 50), 20, tc.startAngle, tc.endAngle, 2, color.Black)
+		})
+	}
+}
+
+func TestImageFillArc(t *testing.T) {
+	scenarios := map[string]struct {
+		startAngle float64
+		endAngle   float64
+	}{
+		"full pie":     {startAngle: 0, endAngle: 2 * math.Pi},
+		"half pie top": {startAngle: 0, endAngle: math.Pi},
+		"quarter pie":  {startAngle: 0, endAngle: math.Pi / 2},
+	}
+
+	for name, tc := range scenarios {
+		t.Run(name, func(t *testing.T) {
+			img := NewBlankImage(vector.New(100, 100))
+			img.FillArc(vector.New(50, 50), 20, tc.startAngle, tc.endAngle, color.Black)
+		})
+	}
+}
+
+func TestImageShape(t *testing.T) {
+	scenarios := map[string]struct {
+		points      []vector.Vector
+		close       bool
+		strokeWidth float64
+	}{
+		"less than 2 points": {
+			points:      []vector.Vector{vector.New(10, 10)},
+			close:       false,
+			strokeWidth: 2,
+		},
+		"two points": {
+			points:      []vector.Vector{vector.New(10, 50), vector.New(90, 50)},
+			close:       false,
+			strokeWidth: 2,
+		},
+		"open polygon": {
+			points:      []vector.Vector{vector.New(10, 10), vector.New(50, 10), vector.New(50, 50)},
+			close:       false,
+			strokeWidth: 2,
+		},
+		"closed polygon": {
+			points:      []vector.Vector{vector.New(10, 10), vector.New(50, 10), vector.New(50, 50)},
+			close:       true,
+			strokeWidth: 2,
+		},
+	}
+
+	for name, tc := range scenarios {
+		t.Run(name, func(t *testing.T) {
+			img := NewBlankImage(vector.New(100, 100))
+			img.Shape(tc.points, tc.close, tc.strokeWidth, color.Black)
+		})
+	}
+}
+
+func TestImageFillShape(t *testing.T) {
+	scenarios := map[string]struct {
+		points []vector.Vector
+		close  bool
+	}{
+		"less than 2 points": {
+			points: []vector.Vector{vector.New(10, 10)},
+			close:  false,
+		},
+		"two points": {
+			points: []vector.Vector{vector.New(10, 50), vector.New(90, 50)},
+			close:  false,
+		},
+		"open polygon": {
+			points: []vector.Vector{vector.New(10, 10), vector.New(50, 10), vector.New(50, 50)},
+			close:  false,
+		},
+		"closed polygon": {
+			points: []vector.Vector{vector.New(10, 10), vector.New(50, 10), vector.New(50, 50)},
+			close:  true,
+		},
+	}
+
+	for name, tc := range scenarios {
+		t.Run(name, func(t *testing.T) {
+			img := NewBlankImage(vector.New(100, 100))
+			img.FillShape(tc.points, tc.close, color.Black)
+		})
+	}
+}
