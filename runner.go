@@ -4,6 +4,7 @@ import (
 	"errors"
 	"image/color"
 	"sync"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -13,6 +14,7 @@ type runner struct {
 	backgroundColor           color.Color
 	antyaliasing              bool
 	terminationKeys           []Key
+	prevTickTime              time.Time
 
 	once sync.Once
 }
@@ -70,15 +72,24 @@ func (r *runner) Update() (err error) {
 		}
 	}
 
+	now := time.Now()
+	defer func() {
+		r.prevTickTime = now
+	}()
+
 	r.once.Do(func() {
-		err = sketch.Setup(newEnvironment(r.screenWidth, r.screenHeight, r.backgroundColor))
+		r.prevTickTime = now
+		err = sketch.Setup(newEnvironment(r.screenWidth, r.screenHeight, 0))
 	})
 	if err != nil {
 		return err
 	}
 
 	return sketch.Update(
-		newEnvironment(r.screenWidth, r.screenHeight, r.backgroundColor),
+		newEnvironment(
+			r.screenWidth, r.screenHeight,
+			now.Sub(r.prevTickTime),
+		),
 	)
 }
 

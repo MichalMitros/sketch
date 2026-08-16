@@ -119,13 +119,11 @@ func TestRunnerUpdate(t *testing.T) {
 			assert.NotNil(t, m.lastSetup)
 			assert.Equal(t, 800, m.lastSetup.width)
 			assert.Equal(t, 600, m.lastSetup.height)
-			assert.Equal(t, r.backgroundColor, m.lastSetup.backgroundColor)
 
 			if tc.expectedUpdates > 0 {
 				assert.NotNil(t, m.lastUpdate)
 				assert.Equal(t, 800, m.lastUpdate.width)
 				assert.Equal(t, 600, m.lastUpdate.height)
-				assert.Equal(t, r.backgroundColor, m.lastUpdate.backgroundColor)
 			}
 		})
 	}
