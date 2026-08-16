@@ -1,6 +1,0 @@
-.vscode
-
-vendor
-
-*.out
-coverage.html
