@@ -10,16 +10,16 @@ import (
 	ebiten_vec "github.com/hajimehoshi/ebiten/v2/vector"
 )
 
-// Screen is the screen used to draw to.
-type Screen struct {
+// Scene is the scene used to draw to.
+type Scene struct {
 	img          *Image
 	antyaliasing bool
 	background   color.Color
 	transforms   internal.TransformationStack
 }
 
-func newScreen(img *Image, background color.Color, antyaliasing bool) *Screen {
-	return &Screen{
+func newScene(img *Image, background color.Color, antyaliasing bool) *Scene {
+	return &Scene{
 		img:          img,
 		background:   background,
 		antyaliasing: antyaliasing,
@@ -27,84 +27,84 @@ func newScreen(img *Image, background color.Color, antyaliasing bool) *Screen {
 	}
 }
 
-// Width returns the width of the screen.
-func (s *Screen) Width() float64 {
+// Width returns the width of the scene.
+func (s *Scene) Width() float64 {
 	return float64(s.img.Width())
 }
 
-// Height returns the height of the screen.
-func (s *Screen) Height() float64 {
+// Height returns the height of the scene.
+func (s *Scene) Height() float64 {
 	return float64(s.img.Height())
 }
 
-// Size returns the width and height of the screen.
-func (s *Screen) Size() vector.Vector {
+// Size returns the width and height of the scene.
+func (s *Scene) Size() vector.Vector {
 	return s.img.Size()
 }
 
-// Clear clears the screen.
-func (s *Screen) Clear() {
+// Clear clears the scene.
+func (s *Scene) Clear() {
 	s.img.Fill(s.background)
 }
 
-// Fill fills the screen with the given color.
-func (s *Screen) Fill(c color.Color) {
+// Fill fills the scene with the given color.
+func (s *Scene) Fill(c color.Color) {
 	s.img.Fill(c)
 }
 
 // At returns the color at the given position.
-func (s *Screen) At(v vector.Vector) color.Color {
+func (s *Scene) At(v vector.Vector) color.Color {
 	return s.img.At(v)
 }
 
 // Scale scales both coordinate axes by rate.
-func (s *Screen) Scale(rate float64) {
+func (s *Scene) Scale(rate float64) {
 	s.transforms.Scale(rate, rate)
 }
 
 // ScaleX scales the X coordinate axis by rate.
-func (s *Screen) ScaleX(rate float64) {
+func (s *Scene) ScaleX(rate float64) {
 	s.transforms.Scale(rate, 1)
 }
 
 // ScaleY scales the Y coordinate axis by rate.
-func (s *Screen) ScaleY(rate float64) {
+func (s *Scene) ScaleY(rate float64) {
 	s.transforms.Scale(1, rate)
 }
 
 // Rotate rotates the coordinate system by angle radians.
-func (s *Screen) Rotate(angle float64) {
+func (s *Scene) Rotate(angle float64) {
 	s.transforms.Rotate(angle)
 }
 
 // Transform moves the origin of the coordinate system by v.
-func (s *Screen) Transform(v vector.Vector) {
+func (s *Scene) Transform(v vector.Vector) {
 	s.transforms.Translate(v.X, v.Y)
 }
 
 // TransformX moves the origin of the coordinate system along the X axis.
-func (s *Screen) TransformX(dx float64) {
+func (s *Scene) TransformX(dx float64) {
 	s.transforms.Translate(dx, 0)
 }
 
 // TransformY moves the origin of the coordinate system along the Y axis.
-func (s *Screen) TransformY(dy float64) {
+func (s *Scene) TransformY(dy float64) {
 	s.transforms.Translate(0, dy)
 }
 
 // Push adds an identity transformation layer to the stack.
-func (s *Screen) Push() {
+func (s *Scene) Push() {
 	s.transforms.Push()
 }
 
 // Pull removes the most recently pushed transformation layer.
 // Pulling the initial layer has no effect.
-func (s *Screen) Pull() {
+func (s *Scene) Pull() {
 	s.transforms.Pull()
 }
 
 // Line draws a line from v1 to v2 with the given stroke width and color.
-func (s *Screen) Line(v1, v2 vector.Vector, strokeWidth float64, c color.Color) {
+func (s *Scene) Line(v1, v2 vector.Vector, strokeWidth float64, c color.Color) {
 	var path ebiten_vec.Path
 	path.MoveTo(float32(v1.X), float32(v1.Y))
 	path.LineTo(float32(v2.X), float32(v2.Y))
@@ -112,37 +112,37 @@ func (s *Screen) Line(v1, v2 vector.Vector, strokeWidth float64, c color.Color) 
 }
 
 // Rectangle draws a rectangle at the given position with the given width, height, stroke width and color.
-func (s *Screen) Rectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+func (s *Scene) Rectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
 	path := rectanglePath(v, width, height)
 	s.strokePath(&path, strokeWidth, c)
 }
 
 // FillRectangle draws a filled rectangle at the given position with the given width, height, stroke width and color.
-func (s *Screen) FillRectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
+func (s *Scene) FillRectangle(v vector.Vector, width, height, strokeWidth float64, c color.Color) {
 	path := rectanglePath(v, width, height)
 	s.fillPath(&path, c)
 }
 
 // Circle draws a circle at the given position with the given radius, stroke width and color.
-func (s *Screen) Circle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+func (s *Scene) Circle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
 	path := circlePath(v, radius)
 	s.strokePath(&path, strokeWidth, c)
 }
 
 // FillCircle draws a filled circle at the given position with the given radius, stroke width and color.
-func (s *Screen) FillCircle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
+func (s *Scene) FillCircle(v vector.Vector, radius, strokeWidth float64, c color.Color) {
 	path := circlePath(v, radius)
 	s.fillPath(&path, c)
 }
 
 // Arc draws an arc at the given position with the given radius, start angle, end angle, stroke width and color.
-func (s *Screen) Arc(v vector.Vector, radius, startAngle, endAngle, strokeWidth float64, c color.Color) {
+func (s *Scene) Arc(v vector.Vector, radius, startAngle, endAngle, strokeWidth float64, c color.Color) {
 	path := arcPath(v, radius, startAngle, endAngle)
 	s.strokePath(&path, strokeWidth, c)
 }
 
 // FillArc draws a filled arc (pie slice) at the given position with the given radius, start angle, end angle and color.
-func (s *Screen) FillArc(v vector.Vector, radius, startAngle, endAngle float64, c color.Color) {
+func (s *Scene) FillArc(v vector.Vector, radius, startAngle, endAngle float64, c color.Color) {
 	path := fillArcPath(v, radius, startAngle, endAngle)
 	s.fillPath(&path, c)
 }
@@ -150,7 +150,7 @@ func (s *Screen) FillArc(v vector.Vector, radius, startAngle, endAngle float64, 
 // Shape draws a polygon through the given points with the given stroke width and color.
 // If close is true, the shape is closed. If len(points) < 2, nothing is drawn.
 // If len(points) == 2, a line is drawn.
-func (s *Screen) Shape(points []vector.Vector, close bool, strokeWidth float64, c color.Color) {
+func (s *Scene) Shape(points []vector.Vector, close bool, strokeWidth float64, c color.Color) {
 	if len(points) < 2 {
 		return
 	}
@@ -161,7 +161,7 @@ func (s *Screen) Shape(points []vector.Vector, close bool, strokeWidth float64, 
 // FillShape draws a filled polygon through the given points with the given color.
 // If close is true, the shape is closed. If len(points) < 2, nothing is drawn.
 // If len(points) == 2, a line is drawn.
-func (s *Screen) FillShape(points []vector.Vector, close bool, c color.Color) {
+func (s *Scene) FillShape(points []vector.Vector, close bool, c color.Color) {
 	if len(points) < 2 {
 		return
 	}
@@ -169,10 +169,10 @@ func (s *Screen) FillShape(points []vector.Vector, close bool, c color.Color) {
 	s.fillPath(&path, c)
 }
 
-// DrawImage draws an image onto the screen at the given position,
+// DrawImage draws an image onto the scene at the given position,
 // scaled to the given size. The image is drawn with respect to the current transformation
 // stack (scale, rotate, translate). Passing a nil image is a no-op.
-func (s *Screen) DrawImage(img *Image, pos, size vector.Vector) {
+func (s *Scene) DrawImage(img *Image, pos, size vector.Vector) {
 	if img == nil {
 		return
 	}
@@ -184,8 +184,6 @@ func (s *Screen) DrawImage(img *Image, pos, size vector.Vector) {
 	}
 
 	var eo ebiten.DrawImageOptions
-	// Operations are applied in reverse call order:
-	// p' = TransformStack * Translate(pos) * Scale(sx, sy) * p
 	eo.GeoM.Concat(s.transforms.GeometryMatrix())
 	eo.GeoM.Translate(pos.X, pos.Y)
 	eo.GeoM.Scale(size.X/imgW, size.Y/imgH)
@@ -251,7 +249,7 @@ func polygonPath(points []vector.Vector, close bool) ebiten_vec.Path {
 	return path
 }
 
-func (s *Screen) transformedPath(path *ebiten_vec.Path) ebiten_vec.Path {
+func (s *Scene) transformedPath(path *ebiten_vec.Path) ebiten_vec.Path {
 	var transformed ebiten_vec.Path
 	transformed.AddPath(path, &ebiten_vec.AddPathOptions{
 		GeoM: s.transforms.GeometryMatrix(),
@@ -259,20 +257,20 @@ func (s *Screen) transformedPath(path *ebiten_vec.Path) ebiten_vec.Path {
 	return transformed
 }
 
-func (s *Screen) drawPathOptions(c color.Color) ebiten_vec.DrawPathOptions {
+func (s *Scene) drawPathOptions(c color.Color) ebiten_vec.DrawPathOptions {
 	var options ebiten_vec.DrawPathOptions
 	options.AntiAlias = s.antyaliasing
 	options.ColorScale.ScaleWithColor(c)
 	return options
 }
 
-func (s *Screen) fillPath(path *ebiten_vec.Path, c color.Color) {
+func (s *Scene) fillPath(path *ebiten_vec.Path, c color.Color) {
 	transformed := s.transformedPath(path)
 	options := s.drawPathOptions(c)
 	ebiten_vec.FillPath(s.img.toEbitenImage(), &transformed, nil, &options)
 }
 
-func (s *Screen) strokePath(path *ebiten_vec.Path, strokeWidth float64, c color.Color) {
+func (s *Scene) strokePath(path *ebiten_vec.Path, strokeWidth float64, c color.Color) {
 	var transformed ebiten_vec.Path
 	transformed.AddStroke(path, &ebiten_vec.AddStrokeOptions{
 		StrokeOptions: ebiten_vec.StrokeOptions{Width: float32(strokeWidth)},

@@ -15,26 +15,26 @@ type mockRunnerSketch struct {
 	drawCalls   int
 	setupErr    error
 	updateErr   error
-	lastSetup   *State
-	lastUpdate  *State
-	lastScreen  *Screen
+	lastSetup   *Environment
+	lastUpdate  *Environment
+	lastScene   *Scene
 }
 
-func (m *mockRunnerSketch) Setup(s *State) error {
+func (m *mockRunnerSketch) Setup(s *Environment) error {
 	m.setupCalls++
 	m.lastSetup = s
 	return m.setupErr
 }
 
-func (m *mockRunnerSketch) Update(s *State) error {
+func (m *mockRunnerSketch) Update(s *Environment) error {
 	m.updateCalls++
 	m.lastUpdate = s
 	return m.updateErr
 }
 
-func (m *mockRunnerSketch) Draw(s *Screen) {
+func (m *mockRunnerSketch) Draw(s *Scene) {
 	m.drawCalls++
-	m.lastScreen = s
+	m.lastScene = s
 }
 
 func setGlobalSketch(s Sketchable) func() {
@@ -177,11 +177,11 @@ func TestRunnerDraw(t *testing.T) {
 
 			m, _ := tc.sketch.(*mockRunnerSketch)
 			assert.Equal(t, 1, m.drawCalls)
-			assert.NotNil(t, m.lastScreen)
-			assert.NotNil(t, m.lastScreen.img)
-			assert.Same(t, img, m.lastScreen.img.img)
-			assert.Equal(t, r.backgroundColor, m.lastScreen.background)
-			assert.Equal(t, r.antyaliasing, m.lastScreen.antyaliasing)
+			assert.NotNil(t, m.lastScene)
+			assert.NotNil(t, m.lastScene.img)
+			assert.Same(t, img, m.lastScene.img.img)
+			assert.Equal(t, r.backgroundColor, m.lastScene.background)
+			assert.Equal(t, r.antyaliasing, m.lastScene.antyaliasing)
 		})
 	}
 }

@@ -6,7 +6,7 @@
 
 A simplified, opinionated wrapper around [Ebiten](https://github.com/hajimehoshi/ebiten) Go's 2D game engine designed for creative coding and quick visual experiments. Instead of managing the full Ebiten game loop yourself, you implement a single `Sketchable` interface and call `Run`. The library handles window setup, frame scheduling, and coordinate-system transforms so you can focus on drawing.
 
-**Sketch** gives you a `Screen` with a high-level drawing API: lines, rectangles, circles, arcs, polygons, all with both stroked and filled version and automatic transform support (translate, rotate, scale, push/pull). Keyboard and mouse input are exposed as simple package-level functions as well as through the `State` passed to each frame. A `vector` sub-package provides 2D Cartesian and polar vector types for convenient geometry math.
+**Sketch** gives you a `Scene` with a high-level drawing API: lines, rectangles, circles, arcs, polygons, all with both stroked and filled version and automatic transform support (translate, rotate, scale, push/pull). Keyboard and mouse input are exposed as simple package-level functions as well as through the `Environment` passed to each frame. A `vector` sub-package provides 2D Cartesian and polar vector types for convenient geometry math.
 
 ## Getting started
 
@@ -36,21 +36,21 @@ type BouncingBall struct {
 }
 
 // Setup is called once before first Update() call.
-// It's the best way of initializing the sketch if its parameters require data from the State, like screen size.
-func (b *BouncingBall) Setup(state *sketch.State) error {
-	b.pos = state.ScreenSize().Scale(0.5) // center of the screen, screen width / 2 and screen height / 2
+// It's the best way of initializing the sketch if its parameters require data from the Environment, like screen size.
+func (b *BouncingBall) Setup(env *sketch.Environment) error {
+	b.pos = env.ScreenSize().Scale(0.5) // center of the screen, screen width / 2 and screen height / 2
 	b.velocity = vector.New(3, 2)
 	b.radius = 30
 	return nil
 }
 
 // Update is called every frame.
-func (b *BouncingBall) Update(state *sketch.State) error {
+func (b *BouncingBall) Update(env *sketch.Environment) error {
 	// move the ball
 	b.pos = b.pos.Add(b.velocity)
 
     // check if the ball is out of bounds
-    w, h := state.ScreenSize().Values() // Values() returns the vector's components for easy access
+    w, h := env.ScreenSize().Values() // Values() returns the vector's components for easy access
 	if b.pos.X-b.radius < 0 || b.pos.X+b.radius > w {
 		b.velocity.X *= -1
 	}
@@ -60,16 +60,16 @@ func (b *BouncingBall) Update(state *sketch.State) error {
 
     // terminate the sketch if the escape key is pressed,
     // can be also done by passing WithTerminationKeys(sketch.KeyEscape) to Run
-	if state.IsKeyPressed(sketch.KeyEscape) {
+	if env.IsKeyPressed(sketch.KeyEscape) {
 		return sketch.Termination
 	}
 	return nil
 }
 
 // Draw is used each frame to render it.
-func (b *BouncingBall) Draw(screen *sketch.Screen) {
+func (b *BouncingBall) Draw(scene *sketch.Scene) {
     // fill red circle at b.pos with radius b.radius and stroke width 2
-	screen.FillCircle(b.pos, b.radius, 2, color.RGBA{255, 0, 0, 255})
+	scene.FillCircle(b.pos, b.radius, 2, color.RGBA{255, 0, 0, 255})
 }
 
 func main() {
@@ -132,35 +132,35 @@ sketch.MonitorSize()   // size (as vector.Vector) of the primary monitor
 
 ---
 
-## State
+## Environment
 
-`State` is passed to both `Setup` and `Update`. It carries:
+`Environment` is passed to both `Setup` and `Update`. It carries:
 
 ```go
-state.ScreenSize()           // vector.Vector - current width and height
+env.ScreenSize()           // vector.Vector - current width and height
 ```
 
-When resizing of the window is enabled, always read dimensions from `State` instead of caching them from `Setup`.
+When resizing of the window is enabled, always read dimensions from `Environment` instead of caching them from `Setup`.
 
 ---
 
-## Screen
+## Scene
 
-`Screen` is the drawing surface passed to `Draw`. Every shape method accepts screen-space coordinates and a `color.Color`.
+`Scene` is the drawing surface passed to `Draw`. Every shape method accepts screen-space coordinates and a `color.Color`.
 
 ### Transforms
 
 Push/pull a transformation stack to isolate coordinate changes:
 
 ```go
-screen.Push()			  // push a new transformation layer to easily isolate changes
-screen.Translate(v)       // move origin
-screen.Rotate(angle)      // rotate axes (radians)
-screen.Scale(rate)        // uniform scale
-screen.ScaleX(rate)       // scale only X
-screen.ScaleY(rate)       // scale only Y
+scene.Push()			  // push a new transformation layer to easily isolate changes
+scene.Translate(v)       // move origin
+scene.Rotate(angle)      // rotate axes (radians)
+scene.Scale(rate)        // uniform scale
+scene.ScaleX(rate)       // scale only X
+scene.ScaleY(rate)       // scale only Y
 // ... draw shapes ...
-screen.Pull()			  // pop the transformation layer to restore previous layer
+scene.Pull()			  // pop the transformation layer to restore previous layer
 ```
 
 ### Shapes
@@ -168,24 +168,24 @@ screen.Pull()			  // pop the transformation layer to restore previous layer
 Stroked methods take a `strokeWidth` and `color.Color`; filled methods take only `color.Color`:
 
 ```go
-screen.Line(v1, v2, strokeWidth, color)
-screen.Rectangle(pos, w, h, strokeWidth, color)
-screen.FillRectangle(pos, w, h, color)
-screen.Circle(center, radius, strokeWidth, color)
-screen.FillCircle(center, radius, color)
-screen.Arc(center, radius, startAngle, endAngle, strokeWidth, color)
-screen.FillArc(center, radius, startAngle, endAngle, color)
-screen.Shape(points, close, strokeWidth, color)
-screen.FillShape(points, close, color)
+scene.Line(v1, v2, strokeWidth, color)
+scene.Rectangle(pos, w, h, strokeWidth, color)
+scene.FillRectangle(pos, w, h, color)
+scene.Circle(center, radius, strokeWidth, color)
+scene.FillCircle(center, radius, color)
+scene.Arc(center, radius, startAngle, endAngle, strokeWidth, color)
+scene.FillArc(center, radius, startAngle, endAngle, color)
+scene.Shape(points, close, strokeWidth, color)
+scene.FillShape(points, close, color)
 ```
 
 Plus:
 
 ```go
-screen.Clear()            // fill with background color
-screen.Fill(c)            // fill with arbitrary color
-screen.At(x, y)           // sample pixel color
-screen.Width() / screen.Height() / screen.Size()
+scene.Clear()            // fill with background color
+scene.Fill(c)            // fill with arbitrary color
+scene.At(x, y)           // sample pixel color
+scene.Width() / scene.Height() / scene.Size()
 ```
 
 ---
@@ -234,10 +234,10 @@ img.SubImage(pos, size)
 img.CopyTo(dst, srcPos, size, dstPos)
 ```
 
-### Drawing on Screen
+### Drawing on Scene
 
 ```go
-screen.DrawImage(img, pos, size)
+scene.DrawImage(img, pos, size)
 ```
 
 ### Example

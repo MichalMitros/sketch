@@ -71,14 +71,14 @@ func (r *runner) Update() (err error) {
 	}
 
 	r.once.Do(func() {
-		err = sketch.Setup(newState(r.screenWidth, r.screenHeight, r.backgroundColor))
+		err = sketch.Setup(newEnvironment(r.screenWidth, r.screenHeight, r.backgroundColor))
 	})
 	if err != nil {
 		return err
 	}
 
 	return sketch.Update(
-		newState(r.screenWidth, r.screenHeight, r.backgroundColor),
+		newEnvironment(r.screenWidth, r.screenHeight, r.backgroundColor),
 	)
 }
 
@@ -91,7 +91,7 @@ func (r *runner) Draw(img *ebiten.Image) {
 	img.Fill(r.backgroundColor)
 
 	sketch.Draw(
-		newScreen(fromEbitenImage(img), r.backgroundColor, r.antyaliasing),
+		newScene(fromEbitenImage(img), r.backgroundColor, r.antyaliasing),
 	)
 }
 

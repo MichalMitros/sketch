@@ -26,26 +26,26 @@ func currentSketch() Sketchable {
 // Sketchable is a single sketchable object.
 type Sketchable interface {
 	// Update is called every frame.
-	Update(*State) error
+	Update(*Environment) error
 	// Draw is used each frame to render it.
-	Draw(*Screen)
+	Draw(*Scene)
 	// Setup is called once before first Update() call.
-	Setup(state *State) error
+	Setup(env *Environment) error
 }
 
 // Sketch is a noop Sketchable which can be embedded and added to Sketch.
 type Sketch struct{}
 
 // Update is called every frame.
-func (s *Sketch) Update(state *State) error {
+func (s *Sketch) Update(env *Environment) error {
 	return nil
 }
 
 // Draw is used each frame to render it.
-func (s *Sketch) Draw(screen *Screen) {}
+func (s *Sketch) Draw(scene *Scene) {}
 
 // Setup is called once before first Update() call.
-func (s *Sketch) Setup(state *State) error {
+func (s *Sketch) Setup(env *Environment) error {
 	return nil
 }
 

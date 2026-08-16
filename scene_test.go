@@ -10,85 +10,85 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewScreen(t *testing.T) {
+func TestNewScene(t *testing.T) {
 	img := NewBlankImage(vector.New(100, 200))
-	s := newScreen(img, color.Black, true)
+	s := newScene(img, color.Black, true)
 
 	assert.Equal(t, img, s.img)
 	assert.Equal(t, color.Black, s.background)
 	assert.True(t, s.antyaliasing)
 }
 
-func TestScreenWidth(t *testing.T) {
-	s := newTestScreen(100, 200)
+func TestSceneWidth(t *testing.T) {
+	s := newTestScene(100, 200)
 	assert.Equal(t, 100.0, s.Width())
 }
 
-func TestScreenHeight(t *testing.T) {
-	s := newTestScreen(100, 200)
+func TestSceneHeight(t *testing.T) {
+	s := newTestScene(100, 200)
 	assert.Equal(t, 200.0, s.Height())
 }
 
-func TestScreenSize(t *testing.T) {
-	s := newTestScreen(100, 200)
+func TestSceneSize(t *testing.T) {
+	s := newTestScene(100, 200)
 	assert.Equal(t, vector.New(100, 200), s.Size())
 }
 
-func TestScreenClear(t *testing.T) {
-	s := newTestScreen(10, 10)
+func TestSceneClear(t *testing.T) {
+	s := newTestScene(10, 10)
 	s.Fill(color.Black)
 	s.Clear()
 }
 
-func TestScreenFill(t *testing.T) {
-	s := newTestScreen(10, 10)
+func TestSceneFill(t *testing.T) {
+	s := newTestScene(10, 10)
 	s.Fill(color.Black)
 }
 
-func TestScreenScale(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneScale(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.Scale(2)
 	s.FillRectangle(vector.New(10, 10), 10, 10, 0, color.Black)
 }
 
-func TestScreenScaleX(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneScaleX(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.ScaleX(2)
 	s.FillRectangle(vector.New(10, 10), 10, 10, 0, color.Black)
 }
 
-func TestScreenScaleY(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneScaleY(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.ScaleY(2)
 	s.FillRectangle(vector.New(10, 10), 10, 10, 0, color.Black)
 }
 
-func TestScreenRotate(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneRotate(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.Rotate(math.Pi / 2)
 	s.FillRectangle(vector.New(10, 10), 10, 10, 0, color.Black)
 }
 
-func TestScreenTransform(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneTransform(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.Transform(vector.New(20, 30))
 	s.FillRectangle(vector.New(0, 0), 10, 10, 0, color.Black)
 }
 
-func TestScreenTransformX(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneTransformX(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.TransformX(20)
 	s.FillRectangle(vector.New(0, 0), 10, 10, 0, color.Black)
 }
 
-func TestScreenTransformY(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneTransformY(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.TransformY(30)
 	s.FillRectangle(vector.New(0, 0), 10, 10, 0, color.Black)
 }
 
-func TestScreenPush(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestScenePush(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.FillRectangle(vector.New(0, 0), 10, 10, 0, color.Black)
 
 	s.Push()
@@ -96,8 +96,8 @@ func TestScreenPush(t *testing.T) {
 	s.FillRectangle(vector.New(0, 0), 10, 10, 0, color.Black)
 }
 
-func TestScreenPull(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestScenePull(t *testing.T) {
+	s := newTestScene(100, 100)
 
 	s.Push()
 	s.Transform(vector.New(30, 30))
@@ -107,32 +107,32 @@ func TestScreenPull(t *testing.T) {
 	s.FillRectangle(vector.New(0, 0), 10, 10, 0, color.Black)
 }
 
-func TestScreenLine(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneLine(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.Line(vector.New(10, 50), vector.New(90, 50), 2, color.Black)
 }
 
-func TestScreenRectangle(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneRectangle(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.Rectangle(vector.New(20, 20), 40, 30, 2, color.Black)
 }
 
-func TestScreenFillRectangle(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneFillRectangle(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.FillRectangle(vector.New(20, 20), 40, 30, 0, color.Black)
 }
 
-func TestScreenCircle(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneCircle(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.Circle(vector.New(50, 50), 20, 2, color.Black)
 }
 
-func TestScreenFillCircle(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneFillCircle(t *testing.T) {
+	s := newTestScene(100, 100)
 	s.FillCircle(vector.New(50, 50), 20, 0, color.Black)
 }
 
-func TestScreenArc(t *testing.T) {
+func TestSceneArc(t *testing.T) {
 	scenarios := map[string]struct {
 		startAngle float64
 		endAngle   float64
@@ -144,13 +144,13 @@ func TestScreenArc(t *testing.T) {
 
 	for name, tc := range scenarios {
 		t.Run(name, func(t *testing.T) {
-			s := newTestScreen(100, 100)
+			s := newTestScene(100, 100)
 			s.Arc(vector.New(50, 50), 20, tc.startAngle, tc.endAngle, 2, color.Black)
 		})
 	}
 }
 
-func TestScreenFillArc(t *testing.T) {
+func TestSceneFillArc(t *testing.T) {
 	scenarios := map[string]struct {
 		startAngle float64
 		endAngle   float64
@@ -162,13 +162,13 @@ func TestScreenFillArc(t *testing.T) {
 
 	for name, tc := range scenarios {
 		t.Run(name, func(t *testing.T) {
-			s := newTestScreen(100, 100)
+			s := newTestScene(100, 100)
 			s.FillArc(vector.New(50, 50), 20, tc.startAngle, tc.endAngle, color.Black)
 		})
 	}
 }
 
-func TestScreenShape(t *testing.T) {
+func TestSceneShape(t *testing.T) {
 	scenarios := map[string]struct {
 		points      []vector.Vector
 		close       bool
@@ -198,13 +198,13 @@ func TestScreenShape(t *testing.T) {
 
 	for name, tc := range scenarios {
 		t.Run(name, func(t *testing.T) {
-			s := newTestScreen(100, 100)
+			s := newTestScene(100, 100)
 			s.Shape(tc.points, tc.close, tc.strokeWidth, color.Black)
 		})
 	}
 }
 
-func TestScreenFillShape(t *testing.T) {
+func TestSceneFillShape(t *testing.T) {
 	scenarios := map[string]struct {
 		points []vector.Vector
 		close  bool
@@ -229,13 +229,13 @@ func TestScreenFillShape(t *testing.T) {
 
 	for name, tc := range scenarios {
 		t.Run(name, func(t *testing.T) {
-			s := newTestScreen(100, 100)
+			s := newTestScene(100, 100)
 			s.FillShape(tc.points, tc.close, color.Black)
 		})
 	}
 }
 
-func TestScreenDrawImage(t *testing.T) {
+func TestSceneDrawImage(t *testing.T) {
 	scenarios := map[string]struct {
 		setupImg func() *Image
 		pos      vector.Vector
@@ -260,7 +260,7 @@ func TestScreenDrawImage(t *testing.T) {
 
 	for name, tc := range scenarios {
 		t.Run(name, func(t *testing.T) {
-			s := newTestScreen(100, 100)
+			s := newTestScene(100, 100)
 
 			if name == "with transform" {
 				s.Transform(vector.New(30, 30))
@@ -393,7 +393,7 @@ func TestPolygonPath(t *testing.T) {
 }
 
 func TestTransformedPath(t *testing.T) {
-	s := newTestScreen(100, 100)
+	s := newTestScene(100, 100)
 	s.Transform(vector.New(10, 20))
 
 	path := rectanglePath(vector.New(0, 0), 30, 40)
@@ -407,7 +407,7 @@ func TestTransformedPath(t *testing.T) {
 }
 
 func TestTransformedPathWithScale(t *testing.T) {
-	s := newTestScreen(100, 100)
+	s := newTestScene(100, 100)
 	s.Scale(2)
 
 	path := rectanglePath(vector.New(10, 10), 20, 30)
@@ -438,7 +438,7 @@ func TestDrawPathOptions(t *testing.T) {
 	for name, tc := range scenarios {
 		t.Run(name, func(t *testing.T) {
 			img := NewBlankImage(vector.New(10, 10))
-			s := newScreen(img, color.White, tc.antyaliasing)
+			s := newScene(img, color.White, tc.antyaliasing)
 			opts := s.drawPathOptions(tc.c)
 
 			assert.Equal(t, tc.antyaliasing, opts.AntiAlias)
@@ -447,19 +447,19 @@ func TestDrawPathOptions(t *testing.T) {
 }
 
 func TestFillPath(t *testing.T) {
-	s := newTestScreen(100, 100)
+	s := newTestScene(100, 100)
 	path := rectanglePath(vector.New(10, 10), 20, 30)
 	s.fillPath(&path, color.Black)
 }
 
 func TestStrokePath(t *testing.T) {
-	s := newTestScreen(100, 100)
+	s := newTestScene(100, 100)
 	path := rectanglePath(vector.New(10, 10), 20, 30)
 	s.strokePath(&path, 2, color.Black)
 }
 
-func TestScreenTransformStackIsolation(t *testing.T) {
-	s := newTestScreen(100, 100)
+func TestSceneTransformStackIsolation(t *testing.T) {
+	s := newTestScene(100, 100)
 
 	s.Scale(2)
 	s.Push()
@@ -474,8 +474,8 @@ func TestScreenTransformStackIsolation(t *testing.T) {
 	assert.Equal(t, 10, bounds.Min.Y)
 }
 
-func newTestScreen(w, h int) *Screen {
+func newTestScene(w, h int) *Scene {
 	img := NewBlankImage(vector.New(float64(w), float64(h)))
 	img.Fill(color.White)
-	return newScreen(img, color.White, true)
+	return newScene(img, color.White, true)
 }
