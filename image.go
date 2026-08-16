@@ -9,10 +9,10 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
-	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	ebiten_vec "github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/michalmitros/sketch/vector"
 )
 
 // Image represents a drawable 2D image.

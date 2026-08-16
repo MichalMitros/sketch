@@ -9,7 +9,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/MichalMitros/sketch/vector"
+	"github.com/michalmitros/sketch/vector"
 	"github.com/stretchr/testify/assert"
 )
 

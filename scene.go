@@ -4,10 +4,10 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/MichalMitros/sketch/internal"
-	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
 	ebiten_vec "github.com/hajimehoshi/ebiten/v2/vector"
+	"github.com/michalmitros/sketch/internal"
+	"github.com/michalmitros/sketch/vector"
 )
 
 // Scene is the scene used to draw to.

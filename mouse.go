@@ -1,8 +1,8 @@
 package sketch
 
 import (
-	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/michalmitros/sketch/vector"
 )
 
 // MouseButton is a mouse button.

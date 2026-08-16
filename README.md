@@ -1,6 +1,6 @@
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/MichalMitros/sketch)](https://pkg.go.dev/github.com/MichalMitros/sketch)
-[![Build Status](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichalMitros/sketch/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/MichalMitros/sketch/branch/master/graph/badge.svg)](https://codecov.io/gh/MichalMitros/sketch)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/michalmitros/sketch)](https://pkg.go.dev/github.com/michalmitros/sketch)
+[![Build Status](https://github.com/michalmitros/sketch/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/michalmitros/sketch/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/michalmitros/sketch/branch/master/graph/badge.svg)](https://codecov.io/gh/michalmitros/sketch)
 
 # sketch
 
@@ -21,8 +21,8 @@ import (
 	"image/color"
     "log"
 
-	"github.com/MichalMitros/sketch"
-	"github.com/MichalMitros/sketch/vector"
+	"github.com/michalmitros/sketch"
+	"github.com/michalmitros/sketch/vector"
 )
 
 type BouncingBall struct {

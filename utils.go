@@ -1,8 +1,8 @@
 package sketch
 
 import (
-	"github.com/MichalMitros/sketch/vector"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/michalmitros/sketch/vector"
 )
 
 // FPS returns the current frames per second.

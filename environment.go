@@ -3,7 +3,7 @@ package sketch
 import (
 	"time"
 
-	"github.com/MichalMitros/sketch/vector"
+	"github.com/michalmitros/sketch/vector"
 )
 
 // Environment is the environment of the sketch used to provide information about the current state of the sketch to Update().

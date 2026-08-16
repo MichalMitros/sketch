@@ -1,4 +1,4 @@
-module github.com/MichalMitros/sketch
+module github.com/michalmitros/sketch
 
 go 1.26.5
 
