@@ -138,6 +138,7 @@ sketch.MonitorSize()   // size (as vector.Vector) of the primary monitor
 
 ```go
 env.ScreenSize()           // vector.Vector - current width and height
+env.DeltaTime()            // time.Duration - time since the last tick; 0 in Setup() and first Update() tick
 ```
 
 When resizing of the window is enabled, always read dimensions from `Environment` instead of caching them from `Setup`.
